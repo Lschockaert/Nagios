@@ -6,3 +6,5 @@ platforms:
 - name: CentOs 7
 categories:
 - monitoring
+
+dependencies: []
