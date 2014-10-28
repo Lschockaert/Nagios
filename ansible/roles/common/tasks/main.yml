@@ -1,0 +1,11 @@
+# roles/common/main.yml
+---
+- name: Install extra repositories
+  yum: pkg={{item}} state=installed
+  with_items:
+    - http://epel.mirror.nucleus.be/7/x86_64/e/epel-release-7-2.noarch.rpm
+    
+- name: Install common packages
+  yum: pkg={{item}} state=installed
+  with_items:
+    - libselinux-python

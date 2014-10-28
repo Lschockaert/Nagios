@@ -1,0 +1,11 @@
+# site.yml
+---
+- hosts: nagios3
+  sudo: true
+  roles:
+    - common
+    - web
+    - db
+    - ssl
+    - nagios
+

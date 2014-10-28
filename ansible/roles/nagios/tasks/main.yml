@@ -1,0 +1,118 @@
+# roles/web/tasks/main.yml
+---
+- name: Install nagios
+  yum: pkg={{item}} state=installed
+  with_items:
+    - nagios
+    - nagios-common
+    - nagios-devel
+    - nagios-plugins-all
+
+- name: Start nagios service
+  service: name=nagios state=running enabled=yes
+
+- name: Openen firewall voor nagios
+  firewalld: port=80/tcp state=enabled permanent=no 
+
+- name: Openen firewall voor nagios (perm)
+  firewalld: port=80/tcp state=enabled permanent=yes
+  
+- name: Add cgi.cfg
+  copy:
+    src=cgi.cfg
+    dest=/etc/nagios/cgi.cfg
+    owner=root
+    group=root
+    mode=0664
+    setype=nagios_etc_t
+  notify: Restart Apache
+  
+- name: Add nagios.cfg
+  copy:
+     src=nagios.cfg
+     dest=/etc/nagios/nagios.cfg
+     owner=root
+     group=root
+     mode=0664
+     setype=nagios_etc_t
+  notify: Restart Apache
+
+- name: Add commands.cfg
+  copy:
+     src=commands.cfg
+     dest=/etc/nagios/objects/commands.cfg
+     owner=root
+     group=root
+     mode=0664
+     setype=nagios_etc_t
+  notify: Restart Apache
+  
+- name: Add contacts.cfg
+  copy:
+     src=contacts.cfg
+     dest=/etc/nagios/objects/contacts.cfg
+     owner=root
+     group=root
+     mode=0664
+     setype=nagios_etc_t
+  notify: Restart Apache
+  
+- name: Add localhost.cfg
+  copy:
+     src=localhost.cfg
+     dest=/etc/nagios/objects/localhost.cfg
+     owner=root
+     group=root
+     mode=0664
+     setype=nagios_etc_t
+  notify: Restart Apache
+  
+- name: Add printer.cfg
+  copy:
+     src=printer.cfg
+     dest=/etc/nagios/objects/printer.cfg
+     owner=root
+     group=root
+     mode=0664
+     setype=nagios_etc_t
+  notify: Restart Apache
+  
+- name: Add switch.cfg
+  copy:
+     src=switch.cfg
+     dest=/etc/nagios/objects/switch.cfg
+     owner=root
+     group=root
+     mode=0644
+     setype=nagios_etc_t
+  notify: Restart Apache
+  
+- name: Add templates.cfg
+  copy:
+     src=templates.cfg
+     dest=/etc/nagios/objects/templates.cfg
+     owner=root
+     group=root
+     mode=0664
+     setype=nagios_etc_t
+  notify: Restart Apache
+  
+- name: Add timeperiods.cfg
+  copy:
+     src=timeperiods.cfg
+     dest=/etc/nagios/objects/timeperiods.cfg
+     owner=root
+     group=root
+     mode=0664
+     setype=nagios_etc_t
+  notify: Restart Apache
+  
+- name: Add windows.cfg
+  copy:
+     src=windows.cfg
+     dest=/etc/nagios/objects/windows.cfg
+     owner=root
+     group=root
+     mode=0664
+     setype=nagios_etc_t
+  notify: Restart Apache

@@ -1,0 +1,56 @@
+# file roles/ssl/main.yml
+---
+- name: Install openssl & mod_ssl 
+  yum: pkg={{item}} state=installed
+  with_items:
+     - mod_ssl
+     - openssl
+
+- name: OpenSSL config file SSLCertificateFile
+  copy: 
+     src=ca.crt
+     dest=/etc/pki/tls/certs
+     owner=root
+     group=root
+     mode=0600
+     setype=httpd_config_t
+  notify: Restart Apache
+  
+- name: OpenSSL config file SSLCertificateKeyFile part 1
+  copy: 
+     src=ca.key
+     dest=/etc/pki/tls/private/ca.key
+     owner=root
+     group=root
+     mode=0600
+     setype=httpd_config_t
+  notify: Restart Apache
+  
+- name: OpenSSL config file SSLCertificateKeyFile part 2
+  copy: 
+     src=ca.csr
+     dest=/etc/pki/tls/private/ca.csr
+     owner=root
+     group=root
+     mode=0600
+     setype=httpd_config_t
+  notify: Restart Apache
+  
+- name: Add ssl.conf
+  copy: 
+     src=ssl.conf
+     dest=/etc/httpd/conf.d/ssl.conf
+     owner=root
+     group=root
+     mode=0644
+     setype=httpd_config_t
+  notify: Restart Apache
+  
+- name: Add firewall rule for the SSL port 443 (perm)
+  firewalld: port=443/tcp permanent=true state=enabled
+  
+- name: Add firewall rule for the SSL port 443 (non-perm)
+  firewalld: port=443/tcp permanent=false state=enabled
+  
+
+  
