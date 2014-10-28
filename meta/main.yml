@@ -5,7 +5,9 @@ galaxy_info:
   description: This is an ansible role for Nagios
   license: BSD
   platforms:
-    - name: CentOs 7
+    - name: EL
+      versions:
+      - 7
   categories:
     - monitoring
     - system
