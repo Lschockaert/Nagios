@@ -1,9 +1,12 @@
 #Nagios
+Monitoring tool for servers and clients. The core version of Nagios is used.
 
-This is a working version of Nagios, fully configured with ansible working on centos7.
-To be able to use this on windows we are using an ansible skeleton.
+#Requirements
+-SSl (also provided in this repo)
 
-To adapt this to your own host and servers, change the configfiles which are loaded automatically in the right place.
+#Role Variables
+In order to set all configuration files easily there is a host_vars file of Nagios. You can add all the variables there. They will be placed in the correct place. If however you want to add even more, cfg's can also be found in this repo (and can also be modified easily).
 
-This is part of an assignment we made during our project in university college.
-If you have any questions,additions,... Feel free to contact.
+#Autohor Information
+This Nagios role was made by four enthousiastic students for a group assignment.
+
