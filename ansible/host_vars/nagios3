@@ -1,0 +1,137 @@
+#host_vars/nagios3
+
+nagios_users:
+    - name: brecht
+      password: secret
+    - name: lenard
+      password: heerser
+
+#variables for cgi.cfg
+main_config_file_location: "/etc/nagios/nagios.cfg"
+physical_html_path: "/usr/share/nagios/html"
+url_html_path: "/nagios"
+show_context_help: "no"
+use_pending_states: "yes"
+use_authentication: "yes"
+use_ssl_authentication: "no"
+default_user_name: ""
+authorized_for_read_only: "user1,user2"
+default_statusmap_layout: "5"
+default_statuswrl_layout: "4"
+ping_syntax: "/bin/ping -n -U -c 5 $HOSTADDRESS$"
+refresh_rate: "60"
+result_limit: "100"
+escape_html_tags: "yes"
+lock_author_names: "yes"
+
+#variables for commands.cfg
+#Add your own commands here!
+nagios_commands:
+    - name:
+      line:
+    - name:
+      line:
+      
+#variables for contacts.cfg
+#Add your own contacts here!
+
+nagios_contacts:
+    - name:
+      use:
+      alias:
+      email:
+    - name:
+      use:
+      alias:
+      email:
+      
+nagios_contactgroups:
+    - name:
+      alias:
+      members:
+      
+#variables for localhost.cfg
+
+nagios_localhostservices:
+    - use:
+      host_name:
+      service_description:
+      check_command:
+      notifications_enabled: 
+      
+#variables for nagios.cfg
+#Don't forget to put the definitions for the other hosts out of comment, otherwise nagios won't recognize this.
+#These are the most needed and changeable commands, if you are an experienced user, go check out the real nagios.cfg for additional changes.
+log_file_location: "/var/log/nagios/nagios.log"
+object_cache_file:  "/var/log/nagios/objects.cache"   
+precached_object_file: "/var/log/nagios/objects.precache"      
+resource_file: "/etc/nagios/private/resource.cfg"
+status_file: "/var/log/nagios/status.dat"      
+status_update_interval: "10"
+
+# This determines the effective user that Nagios should run as.  
+# You can either supply a username or a UID.
+nagios_user: "nagios"
+
+nagios_group: "nagios"
+check_external_commands: "yes"
+command_check_interval: "-1"
+use_syslog: "1"
+log_notifications: "1"
+log_service_retries : "1"
+log_host_retries: "1"
+log_event_handlers: "1"
+log_initial_states : "0"
+log_external_commands: "1"
+log_passive_checks: "1"
+
+admin_email: "nagios@localhost"
+admin_pager: "pagenagios@localhost"
+
+#variables for printer.cfg
+#add your printers here!
+
+nagios_printers:
+    - use:
+      name:
+      alias:
+      address:
+      hostgroup:
+
+nagios_printerservices:
+    - use:
+      name:
+      service_description:
+      check_command:
+      normal_check_interval:
+      retry_check_interval:
+      
+#variables for switch.cfg
+
+nagios_switchs:
+    - use:
+      name:
+      alias:
+      address:
+      hostgroup:
+
+nagios_routerservices:
+    - use:
+      name:
+      service_description:
+      check_command:
+
+#variables for windows.cfg
+
+nagios_windows:
+    - use:
+      name:
+      alias:
+      address:
+
+nagios_windowsservices:
+    - use:
+      name:
+      service_description:
+      check_command:
+

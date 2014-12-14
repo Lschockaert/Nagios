@@ -1,4 +1,4 @@
-# roles/web/tasks/main.yml
+# roles/nagios/tasks/main.yml
 ---
 - name: Install nagios
   yum: pkg={{item}} state=installed
@@ -7,9 +7,10 @@
     - nagios-common
     - nagios-devel
     - nagios-plugins-all
+    - libselinux-python
+    - python-passlib
+    
 
-- name: Start nagios service
-  service: name=nagios state=running enabled=yes
 
 - name: Openen firewall voor nagios
   firewalld: port=80/tcp state=enabled permanent=no 
@@ -17,8 +18,14 @@
 - name: Openen firewall voor nagios (perm)
   firewalld: port=80/tcp state=enabled permanent=yes
   
+# - name: Delete previous original passwd file (for copying purposes)
+  # file:
+    # path=/etc/nagios/passwd
+    # state=absent
+  # notify: Restart Nagios
+    
 - name: Add cgi.cfg
-  copy:
+  template:
     src=cgi.cfg
     dest=/etc/nagios/cgi.cfg
     owner=root
@@ -28,47 +35,47 @@
   notify: Restart Apache
   
 - name: Add nagios.cfg
-  copy:
+  template:
      src=nagios.cfg
      dest=/etc/nagios/nagios.cfg
      owner=root
-     group=root
+     group=nagios
      mode=0664
      setype=nagios_etc_t
   notify: Restart Apache
 
 - name: Add commands.cfg
-  copy:
+  template:
      src=commands.cfg
      dest=/etc/nagios/objects/commands.cfg
      owner=root
-     group=root
+     group=nagios
      mode=0664
      setype=nagios_etc_t
   notify: Restart Apache
   
 - name: Add contacts.cfg
-  copy:
+  template:
      src=contacts.cfg
      dest=/etc/nagios/objects/contacts.cfg
      owner=root
-     group=root
+     group=nagios
      mode=0664
      setype=nagios_etc_t
   notify: Restart Apache
   
 - name: Add localhost.cfg
-  copy:
+  template:
      src=localhost.cfg
      dest=/etc/nagios/objects/localhost.cfg
      owner=root
-     group=root
+     group=nagios
      mode=0664
      setype=nagios_etc_t
   notify: Restart Apache
   
 - name: Add printer.cfg
-  copy:
+  template:
      src=printer.cfg
      dest=/etc/nagios/objects/printer.cfg
      owner=root
@@ -78,41 +85,61 @@
   notify: Restart Apache
   
 - name: Add switch.cfg
-  copy:
+  template:
      src=switch.cfg
      dest=/etc/nagios/objects/switch.cfg
      owner=root
-     group=root
+     group=nagios
      mode=0644
      setype=nagios_etc_t
   notify: Restart Apache
   
 - name: Add templates.cfg
-  copy:
+  template:
      src=templates.cfg
      dest=/etc/nagios/objects/templates.cfg
      owner=root
-     group=root
+     group=nagios
      mode=0664
      setype=nagios_etc_t
   notify: Restart Apache
   
 - name: Add timeperiods.cfg
-  copy:
+  template:
      src=timeperiods.cfg
      dest=/etc/nagios/objects/timeperiods.cfg
      owner=root
-     group=root
+     group=nagios
      mode=0664
      setype=nagios_etc_t
   notify: Restart Apache
   
 - name: Add windows.cfg
-  copy:
+  template:
      src=windows.cfg
      dest=/etc/nagios/objects/windows.cfg
      owner=root
-     group=root
+     group=nagios
      mode=0664
      setype=nagios_etc_t
   notify: Restart Apache
+  
+- name: Set Nagios admin password
+  htpasswd:
+     create=yes
+     crypt_scheme=apr_md5_crypt
+     name={{ item.name }}
+     password={{ item.password }}
+     path=/etc/nagios/passwd
+     owner=root
+     group=nagios
+     mode=0644
+  with_items: nagios_users
+  notify: Restart Apache
+  
+  
+- name: Start Nagios service
+  service: name=nagios state=started enabled=yes
+
+- name: Start nagios service
+  service: name=nagios state=running enabled=yes
